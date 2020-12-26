@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.bootcdn.net/ajax/libs/zrender/4.3.2/zrender.js"></script>
+</head>
+
+<body>
+  <div id='container' style="width: 800px;height: 500px;"></div>
+  <script>
+    const zr = zrender.init(document.querySelector('#container'))
+
+    // 绘制矩形
+    const rect = new zrender.Rect({
+      shape: {
+        x: 0,
+        y: 0,
+        width: 50,
+        height: 50
+      },
+      style: {
+        fill: 'blue',
+        lineWidth: 0
+      }
+    })
+    zr.add(rect)
+
+    // 绘制线段
+    const line = new zrender.Polyline({
+      shape: {
+        points:[
+          [ 51, 0 ],
+          [ 100, 0 ],
+          [ 100, 50 ],
+        ]
+      },
+      style: {
+        strike: 'blue',
+        lineWidth: 1
+      }
+    })
+    zr.add(line)
+
+    // 绘制圆
+    const circle = new zrender.Circle({
+      shape: {
+        cx: 100,
+        cy: 100,
+        r: 50,
+      },
+      style: {
+        fill: 'blue',
+      }
+    })
+    zr.add(circle)
+  </script>
+</body>
+
+</html>
