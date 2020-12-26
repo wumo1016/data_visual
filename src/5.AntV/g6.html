@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://gw.alipayobjects.com/os/lib/antv/g6/4.0.3/dist/g6.min.js"></script>
+</head>
+<body>
+  <div id="chart"></div>
+  <script>
+    const data = {
+      nodes: [ // 点集
+        {
+          id: '1', // 需为字符串
+          x: 100,
+          y: 200,
+          label: '起始点',
+          size: 50,
+          labelCfg: {
+            position: 'center', // center | left | right | top | bottom
+            style: {
+              size: 12,
+              fill: 'blue', // 字体颜色
+            }
+          },
+          style: {
+            fill: '#ff0000',
+            stroke: 'red',
+            lineWidth: 2,
+          }
+        },
+        {
+          id: '2',
+          x: 250,
+          y: 200,
+          label: '目标点1',
+          size: 60
+        },
+        {
+          id: '3',
+          x: 400,
+          y: 200,
+          label: '目标点2',
+          size: 70
+        },
+      ],
+      edges: [ // 线集
+        {
+          source: '1',
+          target: '2',
+          label: '连接线1'
+        },
+        {
+          source: '2',
+          target: '3',
+          label: '连接线2'
+        },
+      ]
+    }
+    const chartDom = document.querySelector('.chart')
+    const grapg = new G6.Graph({
+      container: 'chart',
+      width: 800,
+      height: 500,
+    })
+    grapg.data(data) // 绑定数据源
+    grapg.render()
+  </script>
+</body>
+</html>
