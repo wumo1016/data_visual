@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div>
+    <input type="file" class="upload" />
+  </div>
+  <script>
+    const ACCEPT = ['image/jpeg', 'image/png']
+    const MAX_SIZE = 1024 * 1024 * 2
+    const upload = document.querySelector('.upload')
+    upload.addEventListener('change', function (e) {
+      const [file] = e.target.files
+      if (!file) {
+        return
+      }
+      const {
+        type,
+        size
+      } = file
+      if (!ACCEPT.includes(type)) {
+        upload.value = ''
+        alert('仅支持jpg/png格式的图片')
+        return
+      }
+      if (size > MAX_SIZE) {
+        upload.value = ''
+        alert('最大可上传2M的图片')
+        return
+      }
+
+      convertImageToBase64(file, (base64Image) => compress(base64Image, uploadToServer))
+      // 将图片转化为base64
+      function convertImageToBase64(file, cb) {
+        let reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.addEventListener('load', function (e) {
+          const base64Image = e.target.result
+          cb && cb(base64Image)
+          reader = null
+        })
+      }
+      // 压缩图片
+      function compress(base64Image, uploadToServer) {
+        let maxWidth = 200
+        let maxHieght = 300
+        const image = new Image()
+        image.style = 'width:400px;height:auto;'
+        image.src = base64Image
+        document.body.appendChild(image)
+        image.addEventListener('load', function (e) {
+          let radio // 压缩比
+          let needCompress = false // 是否需要压缩
+          if (image.naturalWidth > maxWidth) {
+            needCompress = true
+            radio = (image.naturalWidth / maxWidth).toFixed(2)
+            maxHieght = image.naturalHeight / radio
+          }
+          if (image.naturalHeight > maxHieght) {
+            needCompress = true
+            radio = (image.naturalHeight / maxHieght).toFixed(2)
+            maxWidth = image.naturalWidth / radio
+          }
+          if (!needCompress) {
+            maxWidth = image.naturalWidth
+            maxHieght = image.naturalHeight
+          }
+          const canvas = document.createElement('canvas')
+          canvas.setAttribute('class', 'canvas')
+          canvas.width = maxWidth
+          canvas.height = maxHieght
+          document.body.appendChild(canvas)
+
+          const ctx = canvas.getContext('2d')
+          ctx.clearRect(0, 0, maxWidth, maxHieght) // 清理矩形区域
+          ctx.drawImage(image, 0, 0, maxWidth, maxHieght)
+          const compressImage = canvas.toDataURL('image/png', 0.1)
+          canvas.remove()
+
+          const _image = new Image()
+          _image.src = compressImage
+          document.body.appendChild(_image)
+
+          uploadToServer(compressImage)
+        })
+      }
+      // 上传图片
+      function uploadToServer(compressImage) {
+        console.log(compressImage)
+      }
+    })
+  </script>
+</body>
+
+</html>
