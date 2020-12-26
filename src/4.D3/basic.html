@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.bootcdn.net/ajax/libs/d3/6.3.1/d3.js"></script>
+</head>
+
+<body>
+  <p>vue</p>
+  <p>react</p>
+  <p>angular</p>
+  <button class="datum">datum</button>
+  <button class="data">data</button>
+  <script>
+    const body = d3.select('body')
+    const p = body.selectAll('p')
+    document.querySelector('.datum').addEventListener('click', function (e) {
+      datum()
+    })
+    document.querySelector('.data').addEventListener('click', function (e) {
+      data()
+    })
+    // 修改成一样的值
+    function datum() {
+      const str = 'test'
+      p.datum(str).text(function (d, i) {
+        return `${d}-${i}`
+      })
+    }
+    // 修改成不一样的值
+    function data() {
+      const d = ['a', 'b', 'c']
+      p.data(d).text(function (d, i) {
+        return `${d}-${i}`
+      })
+    }
+  </script>
+</body>
+
+</html>
