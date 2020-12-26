@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script type="text/javascript" src="https://unpkg.com/@antv/g2plot@latest/dist/g2plot.min.js"></script>
+</head>
+
+<body>
+  <div class="chart"></div>
+  <script>
+    const data = [{
+        year: '1991',
+        value: 3
+      },
+      {
+        year: '1992',
+        value: 4
+      },
+      {
+        year: '1993',
+        value: 3.5
+      },
+      {
+        year: '1994',
+        value: 5
+      },
+      {
+        year: '1995',
+        value: 4.9
+      },
+      {
+        year: '1996',
+        value: 6
+      },
+      {
+        year: '1997',
+        value: 7
+      },
+      {
+        year: '1998',
+        value: 9
+      },
+      {
+        year: '1999',
+        value: 13
+      },
+    ];
+    const chartDom = document.querySelector('.chart')
+    const line = new G2Plot.Line(chartDom, {
+      data,
+      xField: 'year',
+      yField: 'value',
+      point: { // 拐点处添加点
+        size: 5,
+        color: 'pink',
+        style: {
+          stroke: 'yellow',
+          lineWidth: 2,
+          fillOpacity: 0.6, // 填充透明度
+        }
+      },
+      label: { // 拐点处显示文本
+        formatter: item => {
+          return `${item.value}k`
+        }
+      },
+      color: 'yellow', // 线条颜色
+    })
+    line.render()
+  </script>
+</body>
+
+</html>
