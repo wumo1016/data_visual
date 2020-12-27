@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@4.7.0/dist/echarts.min.js"></script>
+  <style>
+    #chart {
+      width: 800px;
+      height: 400px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="chart"></div>
+  <script>
+    const chartDom = document.querySelector('#chart')
+    const chart = echarts.init(chartDom)
+    chart.setOption({
+      title: {
+        text: 'dataset使用案例',
+        subtext: '数据可视化'
+      },
+      grid: { // 直角坐标系的绘图区域
+        top: 60,
+        bottom: 40,
+        left: 10,
+        right: 10,
+        containLabel: true
+      },
+      xAxis: {
+        type: 'category'
+      },
+      yAxis: {},
+      legend: {
+        data: ['分类', '折线图', '柱状图'] // 需要与series中的name进行绑定
+      },
+      dataset: {
+        source: [
+          ['星期一', 20, 86, '专科', 652],
+          ['星期二', 28, 96, '本科', 353],
+          ['星期三', 31, 53, '硕士', 125],
+          ['星期四', 26, 96],
+          ['星期五', 20, 102],
+          ['星期六', 33, 115],
+          ['星期七', 42, 132],
+        ]
+      },
+      toolbox: { // 工具栏
+        feature: {
+          restore: {},
+          dataZoom: { // 区域缩放 框选缩放区域的时候要包含数据区 不包含就不会显示 如果想显示 就设置false(或者设置一个不存在的坐标轴)
+            yAxisIndex: false
+          }, 
+          saveAsImage: {},
+        }
+      },
+      dataZoom: [ // 区域缩放组件
+        {
+          show: true,
+          start: 0, // 起始百分比
+          end: 100
+        }
+      ],
+      series: [{
+          name: '分类',
+          type: 'pie',
+          center: ['80%', 60],
+          radius: 35,
+          encode: {
+            itemName: 3,
+            value: 4
+          }
+        },
+        {
+          name: '折线图',
+          type: 'line',
+          encode: { // 对应数据索引
+            x: 0,
+            y: 2
+          }
+        },
+        {
+          name: '柱状图',
+          type: 'bar',
+          encode: {
+            x: 0,
+            y: 1
+          }
+        },
+      ]
+    })
+  </script>
+</body>
+
+</html>
