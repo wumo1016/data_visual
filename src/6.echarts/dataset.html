@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@4.7.0/dist/echarts.min.js"></script>
+  <style>
+    #chart {
+      width: 800px;
+      height: 400px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="chart"></div>
+  <script>
+    const chartDom = document.querySelector('#chart')
+    const chart = echarts.init(chartDom)
+    chart.setOption({
+      title: {
+        text: 'dataset使用案例'
+      },
+      xAxis: {
+        type: 'category'
+      },
+      yAxis: {},
+      dataset: {
+        source: [
+          ['星期一', 20, 86, '专科', 652],
+          ['星期二', 28, 96, '本科', 353],
+          ['星期三', 31, 53, '硕士', 125],
+          ['星期四', 26, 96],
+          ['星期五', 20, 102],
+          ['星期六', 33, 115],
+          ['星期七', 42, 132],
+        ]
+      },
+      series: [
+        {
+          type: 'pie',
+          center: ['65%', 60],
+          radius: 35,
+          encode: { itemName: 3, value: 4 }
+        },
+        {
+          type: 'line',
+          encode: { x: 0, y: 2 } // 对应数据索引
+        },
+        {
+          type: 'bar',
+          encode: { x: 0, y: 1 }
+        },
+      ]
+    })
+  </script>
+</body>
+
+</html>
