@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@4.7.0/dist/echarts.min.js"></script>
+  <script src="./theme1.js"></script>
+  <style>
+    #chart {
+      width: 800px;
+      height: 400px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="chart"></div>
+  <script>
+    const chartDom = document.querySelector('#chart')
+    // 频繁刷新使用canvas
+    const chart = echarts.init(chartDom, 'vintage') // 自定义主题(默认light,内置dark) 默认是canvas渲染
+    // const chart = echarts.init(chartDom, 'vintage', { renderer: 'svg' }) // 设置成svg渲染
+    chart.setOption({ 
+      title: {
+        text: '快速入门ECharts开发'
+      },
+      xAxis: {
+        data: ['食品', '数码', '服饰', '箱包']
+      },
+      yAxis: {},
+      series: {
+        type: 'bar',
+        data: [100, 120, 90, 150]
+      }
+    })
+  </script>
+</body>
+
+</html>
