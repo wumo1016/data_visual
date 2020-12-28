@@ -50,14 +50,14 @@ export default {
           totalValue: '123'
         },
         {
-          title: '累计销售额',
+          title: '今日交易用户数',
           value: '123',
           id: 'chart3',
-          totalTitle: '123',
+          totalTitle: '退货率',
           totalValue: '123'
         },
         {
-          title: '累计销售额',
+          title: '案发F',
           value: '123',
           id: 'chart4',
           totalTitle: '123',
@@ -68,6 +68,7 @@ export default {
   },
   mounted() {
     this.getOrderNum()
+    this.getTodayTrade()
   },
   methods: {
     getOrderNum() {
@@ -105,6 +106,35 @@ export default {
       }
       this.getChart('#chart2', option)
     },
+
+    getTodayTrade() {
+      const option = {
+        grid: {
+          top: 0,
+          bottom: 0,
+          left: 0,
+          right: 0
+        },
+        tooltip: {},
+        xAxis: {
+          type: 'category',
+          show: false
+        },
+        yAxis: {
+          show: false
+        },
+        series: [
+          {
+            type: 'bar',
+            smooth: true,
+            barWidth: 20,
+            data: [620, 250, 350, 256, 457, 452]
+          }
+        ]
+      }
+      this.getChart('#chart3', option)
+    },
+
     getChart(selector, option) {
       const myChart = this.$echarts.init(
         document.querySelector(selector),
