@@ -1,10 +1,9 @@
-
 function resolve(dir) {
   return require('path').join(__dirname, dir)
 }
 module.exports = {
   devServer: {
-    port: 3000,
+    port: 3000
   },
   productionSourceMap: false,
   assetsDir: 'static',
@@ -14,5 +13,5 @@ module.exports = {
       .set('@c', resolve('src/components'))
       .set('@v', resolve('src/views'))
   },
-  lintOnSave: false,
+  lintOnSave: false
 }
