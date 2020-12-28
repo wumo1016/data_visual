@@ -5,7 +5,7 @@ import './plugins/element.js'
 
 Vue.config.productionTip = false
 
-import echarts from 'echarts'
+const echarts = require('echarts')
 Vue.prototype.$echarts = echarts
 
 new Vue({
