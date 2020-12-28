@@ -17,7 +17,21 @@
               </div>
             </template>
             <div v-else :id="item.id" class="chart_box"></div>
-            <template #total>
+            <template v-if="item.id === 'chart4'" #total>
+              <div style="display:flex;">
+                <div class="compare" style="margin-right: 10px;">
+                  <span>日同比</span>
+                  <span class="emphasis">7.33%</span>
+                  <div class="increase"></div>
+                </div>
+                <div class="compare">
+                  <span>月同比</span>
+                  <span class="emphasis">7.33%</span>
+                  <div class="decrease"></div>
+                </div>
+              </div>
+            </template>
+            <template v-else #total>
               <span>{{ item.totalTitle }} </span>
               <span class="money">{{ item.totalValue }}</span>
             </template>
@@ -57,8 +71,8 @@ export default {
           totalValue: '123'
         },
         {
-          title: '案发F',
-          value: '123',
+          title: '累计用户数',
+          value: '1087452',
           id: 'chart4',
           totalTitle: '123',
           totalValue: '123'
@@ -69,6 +83,7 @@ export default {
   mounted() {
     this.getOrderNum()
     this.getTodayTrade()
+    this.getUserNum()
   },
   methods: {
     getOrderNum() {
@@ -133,6 +148,91 @@ export default {
         ]
       }
       this.getChart('#chart3', option)
+    },
+
+    getUserNum() {
+      const option = {
+        grid: {
+          top: 0,
+          bottom: 0,
+          left: 0,
+          right: 0
+        },
+        xAxis: {
+          type: 'value',
+          show: false
+        },
+        yAxis: {
+          type: 'category',
+          show: false
+        },
+        series: [
+          {
+            type: 'bar',
+            barWidth: 20,
+            stack: '总量',
+            data: [200],
+            itemStyle: {
+              color: '#45c946'
+            }
+          },
+          {
+            type: 'bar',
+            barWidth: 20,
+            stack: '总量',
+            data: [300],
+            itemStyle: {
+              color: '#eee'
+            }
+          },
+          {
+            type: 'custom',
+            data: [200],
+            stack: '总量',
+            renderItem: (params, api) => {
+              const value = api.value(0) // data中的值
+              const endPoint = api.coord([value, 0]) // 计算坐标
+              return {
+                type: 'group',
+                position: endPoint,
+                children: [
+                  {
+                    type: 'path',
+                    shape: {
+                      d:
+                        'M514.525867 956.474027L3.413333 70.46144l1017.173334-2.932053-506.0608 888.94464z',
+                      x: -8,
+                      y: -30,
+                      width: 16,
+                      height: 16,
+                      layout: 'cover' // 图形填充满矩形
+                    },
+                    style: {
+                      fill: '#45c946'
+                    }
+                  },
+                  {
+                    type: 'path',
+                    shape: {
+                      d:
+                        'M514.525867 67.529387L3.413333 953.53856l1017.173334 2.92864L514.525867 67.529387z',
+                      x: -8,
+                      y: 12,
+                      width: 16,
+                      height: 16,
+                      layout: 'cover'
+                    },
+                    style: {
+                      fill: '#45c946'
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+      this.getChart('#chart4', option)
     },
 
     getChart(selector, option) {
