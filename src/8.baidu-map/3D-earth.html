@@ -31,20 +31,31 @@
 		BMAP_NORMAL_MAP: 普通街道视图 
 		BMAP_EARTH_MAP: 地球模式卫星地图
 	*/
-	var map = new BMapGL.Map("allmap", {
-		mapType: BMAP_EARTH_MAP
+	const map = new BMapGL.Map("allmap", {
+		mapType: BMAP_EARTH_MAP,
+		minZoom: 4,
+		maxZoom: 5,
 	});
 	map.centerAndZoom(new BMapGL.Point(118.5, 27.5), 4);
 	map.enableScrollWheelZoom(true);
 	map.setHeading(0); // 设置地图旋转角度
 	map.setTilt(-80); // 设置地图的倾斜角度
-	var scaleCtrl = new BMapGL.ScaleControl({
+
+	const scaleCtrl = new BMapGL.ScaleControl({ // 标尺控件
 		anchor: BMAP_ANCHOR_TOP_LEFT,
 		offset: new BMapGL.Size(100, 10)
-	}); // 添加比例尺控件
+	});
 	map.addControl(scaleCtrl);
-	var zoomCtrl = new BMapGL.ZoomControl({
+
+	const zoomCtrl = new BMapGL.ZoomControl({ // 缩放控件
 		anchor: BMAP_ANCHOR_BOTTOM_LEFT
-	}); // 添加比例尺控件
+	});
 	map.addControl(zoomCtrl);
+
+	map.addEventListener('zoomstart', e => {
+		console.log(map.getZoom())
+	})
+	map.addEventListener('zoomend', e => {
+		console.log(map.getZoom())
+	})
 </script>
