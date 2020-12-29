@@ -215,7 +215,7 @@ export default {
 
 <style lang="scss">
 .sales_vue {
-  margin-top: 20px;
+  margin: 20px 0;
   .el-card__header {
     padding: 0;
   }

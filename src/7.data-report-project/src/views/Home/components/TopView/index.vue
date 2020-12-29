@@ -170,7 +170,7 @@ export default {
         series: [
           {
             type: 'bar',
-            barWidth: 20,
+            barWidth: 16,
             stack: '总量',
             data: [200],
             itemStyle: {
@@ -179,7 +179,7 @@ export default {
           },
           {
             type: 'bar',
-            barWidth: 20,
+            barWidth: 16,
             stack: '总量',
             data: [300],
             itemStyle: {

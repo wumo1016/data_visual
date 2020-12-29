@@ -31,7 +31,7 @@ export default {
   color: #000;
 }
 .chart {
-  height: 80px;
+  height: 60px;
 }
 .line {
   margin: 10px 0;
