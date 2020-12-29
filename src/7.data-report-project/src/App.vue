@@ -16,4 +16,10 @@ body,
   height: 100%;
   font-size: 14px;
 }
+.el-date-editor .el-range-separator {
+  width: 20px !important;
+}
+li {
+  list-style: none;
+}
 </style>
