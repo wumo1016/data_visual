@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import CommonCard from '@c/CommonCard'
+import CommonCard from './CommonCard.vue'
 export default {
   components: { CommonCard },
   data() {
