@@ -17,6 +17,7 @@
               </div>
             </template>
             <div v-else :id="item.id" class="chart_box"></div>
+
             <template v-if="item.id === 'chart4'" #total>
               <div style="display:flex;">
                 <div class="compare" style="margin-right: 10px;">
