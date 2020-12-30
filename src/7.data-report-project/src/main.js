@@ -12,6 +12,9 @@ Vue.prototype.$echarts = echarts
 import ECharts from 'vue-echarts'
 Vue.component('v-chart', ECharts)
 
+import mockData from '@/public/mock'
+Vue.prototype.$screenData = mockData
+
 new Vue({
   router,
   render: h => h(App)

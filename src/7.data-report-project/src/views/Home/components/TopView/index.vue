@@ -7,12 +7,12 @@
             <template v-if="item.id === 'chart1'" class="chart1">
               <div class="compare">
                 <span>日同比</span>
-                <span class="emphasis">7.33%</span>
+                <span class="emphasis">51.05%</span>
                 <div class="increase"></div>
               </div>
               <div class="compare">
                 <span>月同比</span>
-                <span class="emphasis">7.33%</span>
+                <span class="emphasis">95.32%</span>
                 <div class="decrease"></div>
               </div>
             </template>
@@ -22,12 +22,12 @@
               <div style="display:flex;">
                 <div class="compare" style="margin-right: 10px;">
                   <span>日同比</span>
-                  <span class="emphasis">7.33%</span>
+                  <span class="emphasis">39.78%</span>
                   <div class="increase"></div>
                 </div>
                 <div class="compare">
                   <span>月同比</span>
-                  <span class="emphasis">7.33%</span>
+                  <span class="emphasis">74.72%</span>
                   <div class="decrease"></div>
                 </div>
               </div>
@@ -52,28 +52,28 @@ export default {
       cardList: [
         {
           title: '累计销售额',
-          value: '¥123',
+          value: '¥ 45,314,075',
           id: 'chart1',
           totalTitle: '昨日销售额',
-          totalValue: '¥123'
+          totalValue: '¥ 30,000,000'
         },
         {
           title: '累计订单量',
-          value: '123',
+          value: '2,850,209',
           id: 'chart2',
           totalTitle: '昨日订单量',
-          totalValue: '123'
+          totalValue: '2,000,000'
         },
         {
           title: '今日交易用户数',
-          value: '123',
+          value: '436,896',
           id: 'chart3',
           totalTitle: '退货率',
-          totalValue: '123'
+          totalValue: '5.26%'
         },
         {
           title: '累计用户数',
-          value: '1087452',
+          value: '1,398,743',
           id: 'chart4',
           totalTitle: '123',
           totalValue: '123'
@@ -107,9 +107,9 @@ export default {
           {
             type: 'line',
             smooth: true,
-            data: [620, 250, 350, 256, 457, 452],
+            data: this.$screenData.orderTrend,
             areaStyle: {
-              color: '#409eff'
+              color: 'purple'
             },
             lineStyle: {
               width: 0
@@ -134,7 +134,8 @@ export default {
         tooltip: {},
         xAxis: {
           type: 'category',
-          show: false
+          show: false,
+          data: this.$screenData.orderUserTrendAxis
         },
         yAxis: {
           show: false
@@ -144,7 +145,7 @@ export default {
             type: 'bar',
             smooth: true,
             barWidth: 20,
-            data: [620, 250, 350, 256, 457, 452]
+            data: this.$screenData.orderUserTrend
           }
         ]
       }

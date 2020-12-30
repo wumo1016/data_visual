@@ -98,9 +98,33 @@ export default {
           }
         ]
       },
-      chartOption: {
+      chartOption: {}
+    }
+  },
+  computed: {
+    rankList() {
+      return this.activeMenu === '1'
+        ? this.$screenData.orderRank
+        : this.$screenData.userRank
+    }
+  },
+  mounted() {
+    this.menuChange('1')
+  },
+  methods: {
+    menuChange(v) {
+      this.activeMenu = v
+      const xData =
+        this.activeMenu === '1'
+          ? this.$screenData.orderFullYearAxis
+          : this.$screenData.userFullYearAxis
+      const data =
+        this.activeMenu === '1'
+          ? this.$screenData.orderFullYear
+          : this.$screenData.userFullYear
+      this.chartOption = {
         title: {
-          text: '年度销售额',
+          text: this.activeMenu === '1' ? '年度销售额' : '年度访问量',
           textStyle: {
             fontSize: 14
           }
@@ -115,20 +139,7 @@ export default {
         color: ['#3398DB'],
         xAxis: {
           type: 'category',
-          data: [
-            '1月',
-            '2月',
-            '3月',
-            '4月',
-            '5月',
-            '6月',
-            '7月',
-            '8',
-            '9月',
-            '10月',
-            '11月',
-            '12月'
-          ],
+          data: xData,
           axisTick: {
             alignWithLabel: true, // 将短标线中心对准柱子
             lineStyle: {
@@ -162,52 +173,11 @@ export default {
           {
             type: 'bar',
             barWidth: 30,
-            data: [200, 210, 230, 42, 122, 457, 234, 234, 45, 235, 298, 129]
+            data
           }
         ]
-      },
-      rankList: [
-        {
-          rank: 1,
-          name: '麦当劳',
-          money: '323,12'
-        },
-        {
-          rank: 2,
-          name: '麦当劳',
-          money: '323,12'
-        },
-        {
-          rank: 3,
-          name: '麦当劳',
-          money: '323,12'
-        },
-        {
-          rank: 4,
-          name: '麦当劳',
-          money: '323,12'
-        },
-        {
-          rank: 5,
-          name: '麦当劳',
-          money: '323,12'
-        },
-        {
-          rank: 6,
-          name: '麦当劳',
-          money: '323,12'
-        },
-        {
-          rank: 7,
-          name: '麦当劳',
-          money: '323,12'
-        }
-      ]
-    }
-  },
-  mounted() {},
-  methods: {
-    menuChange() {},
+      }
+    },
     radioChange() {}
   }
 }
