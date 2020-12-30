@@ -21,35 +21,49 @@
   </style>
   <script type="text/javascript"
     src="https://api.map.baidu.com/api?type=webgl&v=1.0&ak=G1LFyjrNGIkns5OfpZnrCGAKxpycPLwb"></script>
-  <!-- common.js 一些通用方法(快速初始化initMap, 和一些style) -->
   <script src="https://mapv.baidu.com/gl/examples/static/common.js"></script>
   <script src="https://mapv.baidu.com/build/mapv.js"></script>
   <script src="https://code.bdstatic.com/npm/mapvgl@1.0.0-beta.54/dist/mapvgl.min.js"></script>
-  <title>散点图</title>
+  <script src="https://code.bdstatic.com/npm/mapvgl@1.0.0-beta.97/dist/mapvgl.threelayers.min.js"></script>
+  <title>飞线图</title>
 </head>
 
 <body>
-  <!-- map_container 与 common.js 中的一致 -->
   <div id="map_container"></div>
   <script type="text/javascript">
-    // 准备数据
     const data = []
     const cityData = [
       '北京', '天津', '上海', '重庆', '石家庄', '太原', '呼和浩特', '哈尔滨', '长春',
       '沈阳', '济南', '南京', '合肥', '杭州', '南昌', '福州', '郑州', '武汉', '长沙', '广州',
       '南宁', '西安', '银川', '兰州', '西宁', '乌鲁木齐', '成都', '贵阳', '昆明', '拉萨', '海口'
     ]
-    cityData.map(city => {
-      const ps = mapv.utilCityCenter.getCenterByCityName(city) // 根据城市名获取坐标
-      data.push({
-        geometry: {
-          type: 'Point',
-          coordinates: [ps.lng, ps.lat]
-        },
-        properties: {
-          count: Math.random() * 100
+    const existList = []
+    const length = cityData.length
+    const curve = new mapvgl.BezierCurve();
+    Array(50).fill().map(() => {
+      const startName = cityData[parseInt(Math.random() * length)]
+      const endName = cityData[parseInt(Math.random() * length)]
+      if (startName !== endName) {
+        const target = startName + endName
+        if (!existList.includes(target)) {
+          existList.push(target)
+          const startPoint = mapv.utilCityCenter.getCenterByCityName(startName)
+          const endPoint = mapv.utilCityCenter.getCenterByCityName(endName)
+          curve.setOptions({
+            start: [startPoint.lng, startPoint.lat],
+            end: [endPoint.lng, endPoint.lat]
+          });
+          data.push({
+            geometry: {
+              type: 'LineString',
+              coordinates: curve.getPoints() // 将默认的直线变成贝塞尔曲线显示
+            },
+            properties: {
+              count: Math.random()
+            }
+          })
         }
-      })
+      }
     })
     // 创建地图实例
     const map = initMap({
@@ -67,31 +81,19 @@
     const view = new mapvgl.View({
       map
     })
-    // 创建可视化图层, 并添加到图层管理器中
-    const intensity = new mapvgl.Intensity({ // 工具类 获取大小颜色有差距的数据
-      max: 100,
-      min: 0,
-      maxSize: 30,
-      minSize: 5,
-      gradient: {
-        0: 'rgb(25, 66, 102, 0.8)',
-        0.3: 'rgb(145, 102, 129, 0.8)',
-        0.7: 'rgb(210, 131, 137, 0.8)',
-        1: 'rgb(248, 177, 149, 0.8)'
+    // 创建可视化图层并添加到图层管理器, 关联数据
+    const flylineLayer = new mapvgl.FlyLineLayer({
+      style: 'chaos',
+      step: 0.1,
+      color: 'blue',
+      textureColor: function (data) {
+        return data.properties.count > 0.5 ? '#ff0000' : '#56ccdd';
       },
+      textureWidth: 10,
+      textureLength: 50
     });
-    const layer = new mapvgl.PointLayer({
-      blend: 'lighter',
-      size: function (item) {
-        return intensity.getSize(item.properties.count);
-      },
-      color: function (item) {
-        return intensity.getColor(item.properties.count);
-      }
-    })
-    view.addLayer(layer)
-    // 将数据关联图层
-    layer.setData(data)
+    view.addLayer(flylineLayer);
+    flylineLayer.setData(data);
   </script>
 </body>
 
