@@ -1,4 +1,5 @@
 import Vue from 'vue'
-import { VeLine } from 'v-charts'
+import VCharts from 'v-charts'
+import 'v-charts/lib/style.css'
 
-Vue.component(VeLine.name, VeLine)
+Vue.use(VCharts)
