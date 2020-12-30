@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+  <style type="text/css">
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    #map_container {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      color: rgb(224, 222, 96);
+    }
+  </style>
+  <script type="text/javascript"
+    src="https://api.map.baidu.com/api?type=webgl&v=1.0&ak=G1LFyjrNGIkns5OfpZnrCGAKxpycPLwb"></script>
+  <script src="https://mapv.baidu.com/gl/examples/static/common.js"></script>
+  <script src="https://mapv.baidu.com/build/mapv.js"></script>
+  <script src="https://code.bdstatic.com/npm/mapvgl@1.0.0-beta.54/dist/mapvgl.min.js"></script>
+  <script src="https://code.bdstatic.com/npm/mapvgl@1.0.0-beta.97/dist/mapvgl.threelayers.min.js"></script>
+  <title>飞点图</title>
+</head>
+
+<body>
+  <div id="map_container"></div>
+  <script type="text/javascript">
+    const data = []
+    const endPoint = mapv.utilCityCenter.getCenterByCityName('北京')
+    const nodeData = [{ // 第一个点
+      x: endPoint.lng,
+      y: endPoint.lat,
+    }]
+    const edgeData = [{
+      source: 0, // 起始点 值对应 nodeData 中的索引
+      target: 0, // 目标点
+    }]
+    const cityData = [
+      '天津', '上海', '重庆', '石家庄', '太原', '呼和浩特', '哈尔滨', '长春',
+      '沈阳', '济南', '南京', '合肥', '杭州', '南昌', '福州', '郑州', '武汉', '长沙', '广州',
+      '南宁', '西安', '银川', '兰州', '西宁', '乌鲁木齐', '成都', '贵阳', '昆明', '拉萨', '海口'
+    ]
+    const existList = []
+    const length = cityData.length
+    cityData.map((city, index) => {
+      const startPoint = mapv.utilCityCenter.getCenterByCityName(city)
+      nodeData.push({
+        x: startPoint.lng,
+        y: startPoint.lat,
+      })
+      edgeData.push({
+        source: index + 1,
+        target: 0
+      })
+    })
+    // 边绑定算法，将想接近的线汇聚成一条线
+    const result = mapv.utilForceEdgeBundling().nodes(nodeData).edges(edgeData)()
+    result.map(lines => {
+      const coordinates = []
+      lines.map(line => {
+        coordinates.push([line.x, line.y])
+        data.push({
+          geometry: {
+            type: 'LineString',
+            coordinates
+          },
+          properties: {
+            count: Math.random()
+          }
+        })
+      })
+    })
+    // 创建地图实例
+    const map = initMap({
+      tilt: 0,
+      heading: 0,
+      center: [104.401757, 34.811139],
+      zoom: 6,
+      style: purpleStyle,
+      skyColors: [
+        'rgba(226, 237, 248, 0)', // 地面颜色
+        'rgba(186, 211, 252, 1)' // 天空颜色
+      ]
+    });
+    // 创建图层管理器
+    const view = new mapvgl.View({
+      map
+    })
+    // 创建可视化图层1并添加到图层管理器, 关联数据
+    const lineLayer = new mapvgl.LineLayer({
+      // blend: 'lighter',
+      color: 'rgb(224, 222, 96)',
+      width: 2,
+    });
+    view.addLayer(lineLayer);
+    lineLayer.setData(data);
+
+    // 创建可视化图层2并添加到图层管理器, 关联数据
+    const linePointLayer = new mapvgl.LinePointLayer({
+      size: 5,
+      speed: 3,
+      color: 'rgba(255, 255, 0, 1)',
+      animationType: mapvgl.LinePointLayer.ANIMATION_TYPE_SMOOTH,
+      shapeType: mapvgl.LinePointLayer.SHAPE_TYPE_CIRCLE,
+      blend: 'lighter'
+    });
+    view.addLayer(linePointLayer);
+    linePointLayer.setData(data);
+  </script>
+</body>
+
+</html>
