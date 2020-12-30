@@ -27,34 +27,17 @@
   <script
     src="http://api.map.baidu.com/geoconv/v1/?coords=104.401757,34.811139&from=1&to=6&ak=G1LFyjrNGIkns5OfpZnrCGAKxpycPLwb">
   </script>
-  <title>3D建筑</title>
+  <title>重庆3D建筑</title>
 </head>
 
 <body>
   <div id="map_container"></div>
   <script type="text/javascript">
-    // 初始化数据 
-    const point = mapv.utilCityCenter.getCenterByCityName('北京')
-    const data = [{
-      geometry: {
-        type: 'Polygon',
-        coordinates: [
-          [
-            [116.392394, 39.910683],
-            [116.405976, 39.927727],
-            [116.420996, 39.910351]
-          ]
-        ]
-      },
-      properties: {
-        height: 100, // 多边形高度
-      }
-    }]
     // 创建地图实例
     const map = initMap({
       tilt: 80,
       heading: -45.3,
-      center: [116.392394, 39.910683],
+      center: [106.540547, 29.564858],
       zoom: 17
     });
     // 创建图层管理器
@@ -63,12 +46,44 @@
     })
     // 创建图层并添加
     const shapeLayer = new mapvgl.ShapeLayer({
-      color: 'blue',
+      color: 'rgb(0, 255, 255)',
       opacity: 0.1,
-      style: 'normal',
+      style: 'windowAnimation', // 显示窗户网格
+      riseTime: 1000, // 楼房升起动画
+      selectedIndex: -1,
+      enablePicked: true,
+      selectedColor: 'blue',
+      autoSelect: true,
+      onClick: e => {
+        console.log(e);
+      }
     })
     view.addLayer(shapeLayer);
-    shapeLayer.setData(data);
+    // 初始化数据 
+    const data = []
+    fetch('https://www.youbaobao.xyz/datav-res/examples/chongqing.json').then(res => res.json()).then(res => {
+      const length = res.length
+      for (let i = 0; i < length; i++) {
+        const line = res[i] // line中第一个数据是高度
+        const polygon = []
+        let pt = [line[1] * 512, line[2] * 512] // 转换成墨卡托坐标
+        for (let j = 3; j < line.length; j += 2) {
+          pt[0] += line[j] / 100 / 2
+          pt[1] += line[j + 1] / 100 / 2
+          polygon.push([pt[0], pt[1]])
+        }
+        data.push({
+          geometry: {
+            type: 'Polygon',
+            coordinates: [polygon]
+          },
+          properties: {
+            height: line[0] / 2
+          }
+        })
+      }
+      shapeLayer.setData(data);
+    })
   </script>
 </body>
 
