@@ -32,7 +32,7 @@
         <span>分类销售排行</span>
         <el-radio-group
           v-model="activeRadio"
-          style="float: right; position: relative; bottom: 5px;"
+          style="float: right; position: relative; bottom: 5px"
           @change="radioChange"
         >
           <el-radio-button label="品类"></el-radio-button>
@@ -51,14 +51,52 @@ export default {
   data() {
     return {
       activeRadio: '品类',
-      chartOption1: {
+      chartOption1: {},
+      chartOption2: {},
+      totalData: [],
+      tableData: [],
+      total: 0,
+      pageSize: 4,
+      chartOption3: {}
+    }
+  },
+  mounted() {
+    this.getOption1()
+    this.getOption2()
+    this.getOption3('品类')
+    this.getTotalData()
+    console.log(this.$screenData.category)
+  },
+  methods: {
+    getTotalData() {
+      this.totalData = this.$screenData.wordCloud.map((item, index) => {
+        return {
+          id: index + 1,
+          rank: index + 1,
+          keyword: item.word,
+          count: item.count,
+          users: item.user,
+          range: `${((item.user / item.count) * 100).toFixed(2)}%`
+        }
+      })
+      this.total = this.totalData.length
+      this.getTableData(1)
+    },
+    getTableData(currentPage) {
+      this.tableData = this.totalData.slice(
+        this.pageSize * (currentPage - 1),
+        this.pageSize * (currentPage - 1) + this.pageSize
+      )
+    },
+    getOption1() {
+      this.chartOption1 = {
         title: {
           text: '搜索用户数',
           textStyle: {
             color: '#999',
             fontSize: 14
           },
-          subtext: '116,370',
+          subtext: '87,265',
           subtextStyle: {
             fontSize: 22,
             color: '#333',
@@ -67,6 +105,9 @@ export default {
           },
           left: 0,
           top: 0
+        },
+        tooltip: {
+          trigger: 'axis'
         },
         grid: {
           top: 50,
@@ -77,7 +118,8 @@ export default {
         xAxis: {
           type: 'category',
           show: false,
-          boundaryGap: false // 默认图表距坐标轴的距离
+          boundaryGap: false, // 默认图表距坐标轴的距离
+          data: this.$screenData.wordCloud.map(v => v.word)
         },
         yAxis: {
           show: false
@@ -86,7 +128,7 @@ export default {
           {
             type: 'line',
             smooth: true,
-            data: [620, 250, 350, 256, 457, 452],
+            data: this.$screenData.wordCloud.map(v => v.user),
             areaStyle: {
               color: 'rgba(95,187,255,.5)'
             },
@@ -98,15 +140,17 @@ export default {
             }
           }
         ]
-      },
-      chartOption2: {
+      }
+    },
+    getOption2() {
+      this.chartOption2 = {
         title: {
           text: '搜索量',
           textStyle: {
             color: '#999',
             fontSize: 14
           },
-          subtext: '244,013',
+          subtext: '204,395',
           subtextStyle: {
             fontSize: 22,
             color: '#333',
@@ -115,6 +159,9 @@ export default {
           },
           left: 7,
           top: 0
+        },
+        tooltip: {
+          trigger: 'axis'
         },
         grid: {
           top: 50,
@@ -125,7 +172,8 @@ export default {
         xAxis: {
           type: 'category',
           show: false,
-          boundaryGap: false // 默认图表距坐标轴的距离
+          boundaryGap: false, // 默认图表距坐标轴的距离
+          data: this.$screenData.wordCloud.map(v => v.word)
         },
         yAxis: {
           show: false
@@ -134,7 +182,7 @@ export default {
           {
             type: 'line',
             smooth: true,
-            data: [620, 250, 350, 256, 457, 452],
+            data: this.$screenData.wordCloud.map(v => v.count),
             areaStyle: {
               color: 'rgba(95,187,255,.5)'
             },
@@ -146,11 +194,24 @@ export default {
             }
           }
         ]
-      },
-      tableData: [],
-      total: 0,
-      pageSize: 4,
-      chartOption3: {
+      }
+    },
+    getOption3(type) {
+      const source =
+        type === '品类'
+          ? this.$screenData.category.data1
+          : this.$screenData.category.data2
+      const total = source.data1.reduce((prev, total) => prev + total, 0)
+      const data = source.axisX.map((item, index) => {
+        const percent = `${((source.data1[index] / total) * 100).toFixed(2)}%`
+        return {
+          legendname: source.axisX[index],
+          name: `${source.axisX[index]} | ${percent}`,
+          value: source.data1[index],
+          percent
+        }
+      })
+      this.chartOption3 = {
         title: [
           {
             text: `${this.activeRadio}分布`,
@@ -179,37 +240,16 @@ export default {
         ],
         series: [
           {
-            name: '品类分布',
+            name: `${type}分布`,
             type: 'pie',
-            data: [
-              {
-                name: '测试1',
-                value: 100
-              },
-              {
-                name: '测试2',
-                value: 123
-              },
-              {
-                name: '测试3',
-                value: 235
-              },
-              {
-                name: '测试4',
-                value: 148
-              },
-              {
-                name: '测试5',
-                value: 168
-              }
-            ],
+            data,
             label: {
               normal: {
                 show: true,
-                position: 'outter'
-                // formatter: function(params) {
-                //   return params.data.legendname
-                // }
+                position: 'outter',
+                formatter: function(params) {
+                  return params.data.legendname
+                }
               }
             },
             center: ['35%', '50%'],
@@ -239,29 +279,31 @@ export default {
           }
         },
         tooltip: {
-          trigger: 'item'
-          // formatter: function(params) {
-          //   const str =
-          //     params.seriesName +
-          //     '<br />' +
-          //     params.marker +
-          //     params.data.legendname +
-          //     '<br />' +
-          //     '数量：' +
-          //     params.data.value +
-          //     '<br />' +
-          //     '占比：' +
-          //     params.data.percent +
-          //     '%'
-          //   return str
-          // }
+          trigger: 'item',
+          formatter: function(params) {
+            const str =
+              params.seriesName +
+              '<br />' +
+              params.marker +
+              params.data.legendname +
+              '<br />' +
+              '数量：' +
+              params.data.value +
+              '<br />' +
+              '占比：' +
+              params.data.percent +
+              '%'
+            return str
+          }
         }
       }
+    },
+    radioChange(type) {
+      this.getOption3(type)
+    },
+    onPageChange(currentPage) {
+      this.getTableData(currentPage)
     }
-  },
-  methods: {
-    radioChange() {},
-    onPageChange() {}
   }
 }
 </script>
