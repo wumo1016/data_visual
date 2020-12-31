@@ -7,25 +7,6 @@
 </template>
 
 <script>
-export default {
-  data() {
-    return {
-      chartData: {
-        columns: ['word', 'count'],
-        rows: getRows()
-      },
-      chartSettings: {
-        color: [
-          'rgba(97,216,0,.7)',
-          'rgba(204,178,26,.7)',
-          'rgba(245,166,35,.7)',
-          'rgba(156,13,113,.7)'
-        ]
-      }
-    }
-  }
-}
-
 function getRows() {
   return [
     {
@@ -169,5 +150,23 @@ function getRows() {
       count: 4029
     }
   ]
+}
+export default {
+  data() {
+    return {
+      chartData: {
+        columns: ['word', 'count'],
+        rows: getRows()
+      },
+      chartSettings: {
+        color: [
+          'rgba(97,216,0,.7)',
+          'rgba(204,178,26,.7)',
+          'rgba(245,166,35,.7)',
+          'rgba(156,13,113,.7)'
+        ]
+      }
+    }
+  }
 }
 </script>
