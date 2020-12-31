@@ -66,7 +66,7 @@ export default {
       },
       {
         name: 'Top 10',
-        type: 'effectScatter',
+        type: 'effectScatter', // 波纹散点
         coordinateSystem: 'bmap',
         encode: {
           value: 2
@@ -87,9 +87,9 @@ export default {
           position: 'right',
           show: true
         },
-        hoverAnimation: true,
+        hoverAnimation: true, // 鼠标移上动画
         rippleEffect: {
-          brushType: 'stroke'
+          brushType: 'stroke' // 空心波纹
         },
         itemStyle: {
           color: 'purple',
