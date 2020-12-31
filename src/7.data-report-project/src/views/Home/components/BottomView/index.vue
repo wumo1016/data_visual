@@ -65,7 +65,6 @@ export default {
     this.getOption2()
     this.getOption3('品类')
     this.getTotalData()
-    console.log(this.$screenData.category)
   },
   methods: {
     getTotalData() {
